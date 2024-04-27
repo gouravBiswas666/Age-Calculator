@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Age Calculator</title>
+        <link rel="stylesheet" href="style.css">
+    </head>
+    <body>
+        <div class="container">
+            <div class="calculator">
+                <h1>JavaScript<br><span>Age Calculator</span></h1>
+                <div class="inputBox">
+                    <input type="date" id="date">
+                    <button onclick="calculateAge()">Calculate</button>
+                </div>
+                <div id="result"></div>
+            </div>
+        </div>
+        <script>
+            const userInput = document.getElementById("date");
+            userInput.max = new Date().toISOString().split("T")[0];
+
+            function calculateAge() {
+                const birthDateString = userInput.value;
+                if (!birthDateString) {
+                    document.getElementById("result").textContent = "Please enter a date.";
+                    return;
+                }
+
+                const birthDate = new Date(birthDateString);
+                const today = new Date();
+
+                let y1 = birthDate.getFullYear();
+                let m1 = birthDate.getMonth();
+                let d1 = birthDate.getDate();
+
+                let y2 = today.getFullYear();
+                let m2 = today.getMonth();
+                let d2 = today.getDate();
+
+                let ageYears = y2 - y1;
+                let ageMonths = m2 - m1;
+                let ageDays = d2 - d1;
+
+                if (ageDays < 0) {
+                    const daysInPrevMonth = getDaysInMonth(y2, m2);
+                    ageDays += daysInPrevMonth;
+                    ageMonths--;
+                }
+
+                if (ageMonths < 0) {
+                    ageMonths += 12;
+                    ageYears--;
+                }
+
+                document.getElementById("result").textContent = `Age: ${ageYears} years, ${ageMonths} months, ${ageDays} days.`;
+            }
+
+            function getDaysInMonth(year, month) {
+                return new Date(year, month + 1, 0).getDate(); // month is zero-based, so add 1
+            }
+        </script>
+    </body>
+</html>
